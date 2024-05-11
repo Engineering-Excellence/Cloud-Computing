@@ -4,3 +4,5 @@ RUN apt update && apt install -y python3
 COPY hello.py .
 
 ENTRYPOINT ["python3", "hello.py"]
+
+ENV NAME CloudComputing

@@ -1,0 +1,20 @@
+docker run --name hello --rm -e NAME=Docker-rm hello:0.2
+
+docker run --name tomcat -p 8080:8080 -d --rm tomcat
+docker run --name tomcat -P -d --rm tomcat
+docker logs tomcat
+docker inspect tomcat
+
+docker container prune
+docker image prune -a
+
+docker run --name my_nginx --rm -d -P nginx
+docker exec -it my_nginx /bin/bash
+head -n 10 /usr/share/nginx/html/index.html
+docker cp index.html my_nginx:/usr/share/nginx/html
+docker cp my_nginx:/usr/share/nginx/html/50x.html .
+mkdir vol
+docker run --name ubuntu -it -v ./vol:/host_directory \\nubuntu:22.04 /bin/bash
+
+docker volume create my-volume
+docker run --name my_nginx --rm -d -P \\n-v my-volume:/usr/share/nginx/html nginx:latest
