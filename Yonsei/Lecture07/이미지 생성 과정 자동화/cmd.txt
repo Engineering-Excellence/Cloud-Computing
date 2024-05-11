@@ -1,0 +1,6 @@
+docker build -t my_httpd:0.2 .
+docker run --name my_httpd -p 1080:80 my_httpd:0.2
+
+docker login
+docker tag my_httpd:0.2 sonatinen/my_httpd:0.2
+docker push sonatinen/my_httpd:0.2
