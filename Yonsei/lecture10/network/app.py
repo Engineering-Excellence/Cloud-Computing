@@ -17,7 +17,16 @@ def get_hit_count():
             retries -= 1
             time.sleep(0.5)
 
+def get_message():
+    try:
+        with open('/msg/message.txt', 'r') as f:
+            return f.readline().strip()
+    except:
+        return 'Hello, world!'
+
 @app.route('/')
 def hello():
+    message = get_message()
     count = get_hit_count()
-    return 'Hello World! I have been seen {} times.\n'.format(count)
+    #return 'Hello from Docker! I have been seen {} times.\n'.format(count)
+    return '{} I have been seen {} times.\n'.format(message, count)
