@@ -1,0 +1,55 @@
+# vol.yaml: 두 개의 PV 와 이들을 포드에서 이용하도록 하기 위한 두 개의 PVC 를 정의
+apiVersion: v1
+kind: PersistentVolume  # Nextcloud PV 정의
+metadata:
+  name: ncdata-pv
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 10Gi  # 스토리지 용량
+  accessModes:
+    - ReadWriteOnce   # 읽기/쓰기 모드
+  hostPath:  # 호스트의 로컬 스토리지 경로
+    path: "/Users/kyle/Documents/Study/Cloud-Computing/Yonsei/lecture13/exercise3/data/ncdata"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim   # Nextcloud PVC 정의
+metadata:
+  name: ncdata-pvc
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
+---
+apiVersion: v1
+kind: PersistentVolume  # MariaDB PV 정의
+metadata:
+  name: dbdata-pv
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:  # 호스트의 로컬 스토리지 경로
+    path: "/Users/kyle/Documents/Study/Cloud-Computing/Yonsei/lecture13/exercise3/data/dbdata"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim   # MariaDB PVC 정의
+metadata:
+  name: dbdata-pvc
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
+

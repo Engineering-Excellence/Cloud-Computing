@@ -1,0 +1,61 @@
+# db.yaml
+apiVersion: apps/v1
+kind: Deployment  # 디플로이먼트 정의
+metadata:
+  name: mariadb-deployment
+spec:
+  replicas: 1  # 포드의 개수를 1로 설정
+  selector:
+    matchLabels:
+      app: mariadb
+  template:
+    metadata:
+      labels:
+        app: mariadb
+    spec:
+      containers:
+        - name: mariadb
+          image: mariadb:10.5  # mariadb:10.5 이미지 사용
+          env:  # ConfigMap에서 환경변수를 가져와서 컨테이너에 적용
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: nextcloud-config
+                  key: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: nextcloud-config
+                  key: MYSQL_DATABASE
+            - name: MYSQL_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: nextcloud-config
+                  key: MYSQL_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: nextcloud-config
+                  key: MYSQL_PASSWORD
+          volumeMounts:
+            - mountPath: "/var/lib/mysql" # 컨테이너 내 마운트 경로 지정
+              name: dbdata-pv # 볼륨 이름
+      volumes:
+        - name: dbdata-pv
+          persistentVolumeClaim:
+            claimName: dbdata-pvc  # vol.yaml에서 정의한 PVC를 사용
+---
+apiVersion: v1
+kind: Service   # 서비스 정의
+metadata:
+  name: mariadb-service
+  labels:
+    app: mariadb
+spec:
+  type: ClusterIP  # ClusterIP 타입으로 설정하여 클러스터 내부에서만 접근 가능
+  ports:
+    - port: 3306
+      targetPort: 3306  # 컨테이너의 3306 포트를 클러스터 IP의 3306 포트로 연결
+  selector:
+    app: mariadb  # mariadb 포드에 대한 트래픽을 라우팅
+

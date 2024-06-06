@@ -1,0 +1,14 @@
+# cfg.yaml: ConfigMap 생성을 위한 매니페스트
+apiVersion: v1
+kind: ConfigMap   # 컨피그맵 정의
+metadata:
+  name: nextcloud-config  # 컨피그맵 이름
+data:   # key-value 쌍
+  REDIS_HOST: redis-service
+  MYSQL_HOST: mariadb-service
+  MYSQL_DATABASE: nextcloud
+  MYSQL_USER: nextcloud
+  MYSQL_PASSWORD: nextcloud
+  MYSQL_ROOT_PASSWORD: nextcloud
+  MYSQL_PASSWORD: nextcloud
+

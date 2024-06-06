@@ -1,0 +1,32 @@
+# redis.yaml
+apiVersion: apps/v1
+kind: Deployment  # 디플로이먼트 정의
+metadata:
+  name: redis-deployment
+spec:
+  replicas: 1  # 하나의 포드로 구성된 디플로이먼트 생성
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:alpine  # redis:alpine 이미지 사용
+
+---
+apiVersion: v1
+kind: Service   # 서비스 정의 
+metadata:
+  name: redis-service
+spec:
+  type: ClusterIP  # ClusterIP 타입 서비스 생성
+  ports:
+    - port: 6379
+      targetPort: 6379
+  selector:
+    app: redis  # redis 포드에 대한 트래픽을 라우팅
+
